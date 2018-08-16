@@ -1,0 +1,22 @@
+{
+  "name": "giftcard",
+  "vendor": "vtex",
+  "version": "0.1.0",
+  "title": "Giftcard",
+  "description": "",
+  "mustUpdateAt": "2019-08-16",
+  "categories": [],
+  "registries": ["smartcheckout"],
+  "settingsSchema": {},
+  "dependencies": {
+    "vtex.admin": "1.x",
+    "vtex.styleguide": "5.x"
+  },
+  "builders": {
+    "pages": "0.x",
+    "react": "2.x"
+  },
+  "scripts": {
+    "postreleasy": "vtex publish --public"
+  }
+}

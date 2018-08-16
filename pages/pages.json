@@ -1,0 +1,12 @@
+{
+  "pages": {
+    "admin/giftcard": {
+      "path": "/admin/giftcard"
+    }
+  },
+  "extensions": {
+    "admin/giftcard": {
+      "component": "root"
+    }
+  }
+}
