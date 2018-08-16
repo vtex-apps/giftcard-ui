@@ -2,11 +2,23 @@
   "pages": {
     "admin/giftcard": {
       "path": "/admin/giftcard"
+    },
+    "admin/giftcard/cards": {
+      "path": "/admin/giftcard/cards"
+    },
+    "admin/giftcard/card": {
+      "path": "/admin/giftcard/card"
     }
   },
   "extensions": {
     "admin/giftcard": {
       "component": "root"
+    },
+    "admin/giftcard/cards": {
+      "component": "cards"
+    },
+    "admin/giftcard/card": {
+      "component": "card"
     }
   }
 }
