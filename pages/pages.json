@@ -7,7 +7,7 @@
       "path": "/admin/giftcard/cards"
     },
     "admin/giftcard/card": {
-      "path": "/admin/giftcard/card"
+      "path": "/admin/giftcard/card/:id"
     }
   },
   "extensions": {

@@ -25,6 +25,26 @@ const cardsReducer = (state = initialState, action) => {
         isLoading: false,
       }
     }
+    case TYPES.REQUEST_CARD: {
+      return {
+        ...state,
+        isLoading: true,
+        card: {},
+      }
+    }
+    case TYPES.RECEIVE_CARD_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        card: action.card,
+      }
+    }
+    case TYPES.RECEIVE_CARD_ERROR: {
+      return {
+        ...state,
+        isLoading: false,
+      }
+    }
     default:
       return state
   }

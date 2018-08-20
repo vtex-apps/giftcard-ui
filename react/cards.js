@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import { intlShape, injectIntl } from 'react-intl'
 import { Link } from 'render'
 
@@ -35,8 +36,10 @@ class Cards extends Component {
           {cards && (
             <ul>
               {cards.map(card => (
-                <li>
-                  <Link page="admin/giftcard/card">{card.id}</Link>
+                <li key={card.id}>
+                  <Link params={{ id: card.id }} page="admin/giftcard/card">
+                    {card.id}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -49,6 +52,9 @@ class Cards extends Component {
 
 Cards.propTypes = {
   intl: intlShape,
+  getCards: PropTypes.func,
+  isLoading: PropTypes.bool,
+  cards: PropTypes.array,
 }
 
 const mapStateToProps = state => ({
