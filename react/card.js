@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { intlShape, injectIntl } from 'react-intl'
+import { withRuntimeContext } from 'render'
 
 import { getCard } from './actions/cards'
 
@@ -23,7 +24,13 @@ class Card extends Component {
   }
 
   componentDidMount() {
-    this.props.getCard(this.props.params.id)
+    const data = {
+      account: this.props.runtime.account,
+      workspace: this.props.runtime.workspace,
+      giftCardId: this.props.params.id,
+    }
+
+    this.props.getCard(data)
   }
 
   handleHeaderLink = () => {
@@ -91,7 +98,7 @@ class Card extends Component {
         />
 
         <div className="pa7">
-          <pre>{JSON.stringify(card, null, 2)}</pre>
+          {card && <pre>{JSON.stringify(card, null, 2)}</pre>}
         </div>
       </div>
     )
@@ -99,7 +106,7 @@ class Card extends Component {
 }
 
 Card.defaultProps = {
-  card: {},
+  card: null,
 }
 
 Card.propTypes = {
@@ -108,6 +115,7 @@ Card.propTypes = {
   getCard: PropTypes.func,
   card: PropTypes.object,
   isLoading: PropTypes.bool,
+  runtime: PropTypes.any,
 }
 
 const mapStateToProps = state => ({
@@ -119,5 +127,5 @@ export default injectIntl(
   connect(
     mapStateToProps,
     { getCard },
-  )(Card),
+  )(withRuntimeContext(Card)),
 )

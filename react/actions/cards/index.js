@@ -1,5 +1,5 @@
 import * as TYPES from '../types'
-// import axios from 'axios'
+import axios from 'axios'
 
 export const mock = [
   {
@@ -184,6 +184,9 @@ export const mock = [
   },
 ]
 
+const localApiBase = ({ workspace, account }) =>
+  `https://${workspace}--${account}.myvtex.com/_v`
+
 // #region getCards
 const requestGetCards = () => ({
   type: TYPES.REQUEST_CARDS,
@@ -194,31 +197,26 @@ const receiveGetCardsSuccess = cards => ({
   cards,
 })
 
-// const receiveGetCardsError = data => ({
-//   type: TYPES.RECEIVE_CARDS_ERROR,
-//   data,
-// })
+const receiveGetCardsError = data => ({
+  type: TYPES.RECEIVE_CARDS_ERROR,
+  data,
+})
 
-export const getCards = () => dispatch => {
-  dispatch(requestGetCards())
+export const getCards = data => dispatch => {
+  dispatch(requestGetCards(data))
 
-  // return axios('https://vtex-giftcard-v2.gatewayio.aws-us-east-2.vtex.io/gatewayio/diego/api/vtex/giftcardv2/gatewayio/giftcards',
-  // )
-  //   .then(response => {
-  //     console.log('response:', response)
-  //     if (Array.isArray(response.data)) {
-  dispatch(receiveGetCardsSuccess(mock))
-  //   } else {
-  //     dispatch(receiveGetCardsError())
-  //   }
-  // })
-  // .catch(error =>
-  //   dispatch(
-  //     receiveGetCardsError(
-  //       (error && error.response && error.response.data) || null,
-  //     ),
-  //   ),
-  // )
+  const { account, workspace } = data
+  const url = `${localApiBase({ account, workspace })}/getgiftcards`
+
+  return axios(url)
+    .then(response => dispatch(receiveGetCardsSuccess(response.data)))
+    .catch(error =>
+      dispatch(
+        receiveGetCardsError(
+          (error && error.response && error.response.data) || null,
+        ),
+      ),
+    )
 }
 // #endregion
 
@@ -233,26 +231,27 @@ const receiveGetCardSuccess = card => ({
   card,
 })
 
-// const receiveGetCardError = data => ({
-//   type: TYPES.RECEIVE_CARD_ERROR,
-//   data,
-// })
+const receiveGetCardError = data => ({
+  type: TYPES.RECEIVE_CARD_ERROR,
+  data,
+})
 
-export const getCard = id => dispatch => {
-  dispatch(requestGetCard(id))
+export const getCard = data => dispatch => {
+  dispatch(requestGetCard(data))
 
-  // return axios(
-  //   `https://diego--gatewayio.myvtex.com/api/vtex/giftcardv2/gatewayio/giftcards/${id}`,
-  // )
-  //   .then(response => {
-  dispatch(receiveGetCardSuccess(mock[0]))
-  // })
-  // .catch(error =>
-  //   dispatch(
-  //     receiveGetCardError(
-  //       (error && error.response && error.response.data) || null,
-  //     ),
-  //   ),
-  // )
+  const { account, workspace } = data
+  const url = `${localApiBase({ account, workspace })}/getgiftcard`
+
+  return axios(url, { params: { giftCardId: data.giftCardId } })
+    .then(response => {
+      dispatch(receiveGetCardSuccess(response.data))
+    })
+    .catch(error =>
+      dispatch(
+        receiveGetCardError(
+          (error && error.response && error.response.data) || null,
+        ),
+      ),
+    )
 }
 // #endregion

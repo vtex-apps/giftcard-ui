@@ -1,0 +1,20 @@
+{
+  "stack": "nodejs",
+  "memory": 128,
+  "routes": {
+    "getgiftcards": {
+      "path": "/_v/getgiftcards",
+      "public": true
+    },
+    "getgiftcard": {
+      "path": "/_v/getgiftcard",
+      "public": true
+    }
+  },
+  "events": {
+    "onAppsLinked": {
+      "sender": "apps",
+      "keys": ["linked"]
+    }
+  }
+}

@@ -10,13 +10,21 @@
   "settingsSchema": {},
   "dependencies": {
     "vtex.admin": "1.x",
-    "vtex.styleguide": "6.x"
+    "vtex.styleguide": "6.x",
+    "vtex.vtex-giftcard-v2": "1.x"
   },
+  "credentialType": "relative",
   "builders": {
     "pages": "0.x",
-    "react": "2.x"
+    "react": "2.x",
+    "node": "3.x"
   },
   "scripts": {
     "postreleasy": "vtex publish --public"
-  }
+  },
+  "policies": [
+    {
+      "name": "vtex.vtex-giftcard-v2:admin"
+    }
+  ]
 }

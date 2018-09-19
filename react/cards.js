@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { intlShape, injectIntl } from 'react-intl'
-import { Link } from 'render'
+import { Link, withRuntimeContext } from 'render'
 
-import { getCards, mock } from './actions/cards'
+import { getCards } from './actions/cards'
 
 import AdminLoading from './components/AdminLoading'
 
@@ -28,14 +28,18 @@ class Cards extends Component {
   componentDidMount() {
     window.postMessage({ action: { type: 'STOP_LOADING' } }, '*')
 
-    // this.props.getCards()
+    const data = {
+      account: this.props.runtime.account,
+      workspace: this.props.runtime.workspace,
+    }
+    this.props.getCards(data)
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if (this.props.cards !== prevProps.cards) {
-  //     this.setState({ cards: this.props.cards })
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    if (this.props.cards !== prevProps.cards) {
+      this.setState({ cards: this.props.cards })
+    }
+  }
 
   handleAddGiftCard = () => {
     console.log('handleAddGiftCard')
@@ -43,7 +47,7 @@ class Cards extends Component {
 
   handleConfirmAdd = e => {
     e.preventDefault()
-    this.handleToggleModal()
+    this.handleCloseModal()
   }
 
   handleInputSearchChange = e => {
@@ -59,8 +63,12 @@ class Cards extends Component {
     console.log('handleInputSearchSubmit')
   }
 
-  handleToggleModal = () => {
-    this.setState({ showModal: !this.state.showModal })
+  handleOpenModal = () => {
+    this.setState({ showModal: true })
+  }
+
+  handleCloseModal = () => {
+    this.setState({ showModal: false })
   }
 
   handleNextClick = () => {}
@@ -80,6 +88,19 @@ class Cards extends Component {
               <Link params={{ id: cellData }} page="admin/giftcard/card">
                 {cellData}
               </Link>
+            </div>
+          ),
+        },
+        emissionDate: {
+          type: 'date-time',
+          title: 'Emission date',
+          cellRenderer: ({ cellData }) => (
+            <div className="ph4">
+              {this.props.intl.formatDate(cellData, {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+              })}
             </div>
           ),
         },
@@ -116,13 +137,13 @@ class Cards extends Component {
     }
 
     return (
-      <div className="bg-muted-5 h-100">
+      <div className="bg-muted-5">
         {isLoading && <AdminLoading />}
 
         <Modal
           centered
           isOpen={this.state.showModal}
-          onClose={this.handleToggleModal}
+          onClose={this.handleCloseModal}
         >
           <div style={{ minWidth: '500px' }}>
             <h2 className="mb8">Add gift card</h2>
@@ -132,10 +153,7 @@ class Cards extends Component {
 
               <div className="flex justify-end">
                 <span className="mr4">
-                  <Button
-                    variation="secondary"
-                    onClick={this.handleToggleModal}
-                  >
+                  <Button variation="secondary" onClick={this.handleCloseModal}>
                     cancel
                   </Button>
                 </span>
@@ -150,7 +168,7 @@ class Cards extends Component {
         <PageHeader
           title={intl.formatMessage({ id: 'page.cards.title' })}
           buttonLabel="+ New"
-          onButtonClick={this.handleToggleModal}
+          onButtonClick={this.handleOpenModal}
         />
 
         <div className="pa7">
@@ -158,7 +176,7 @@ class Cards extends Component {
             <ResourceList
               table={{
                 schema: schema,
-                items: mock,
+                items: this.state.cards,
               }}
               inputSearch={{
                 value: this.state.searchValue,
@@ -174,7 +192,7 @@ class Cards extends Component {
                 currentItemTo: 10,
                 textOf: 'de',
                 textShowRows: 'show rows',
-                totalItems: mock.length,
+                totalItems: this.state.cards.length,
                 rowsOptions: [5, 10, 15, 20],
               }}
             />
@@ -195,6 +213,7 @@ Cards.propTypes = {
   getCards: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   cards: PropTypes.array,
+  runtime: PropTypes.any,
 }
 
 const mapStateToProps = state => ({
@@ -206,5 +225,5 @@ export default injectIntl(
   connect(
     mapStateToProps,
     { getCards },
-  )(Cards),
+  )(withRuntimeContext(Cards)),
 )
