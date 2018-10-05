@@ -6,8 +6,8 @@
       "path": "/_v/getgiftcards",
       "public": true
     },
-    "getgiftcard": {
-      "path": "/_v/getgiftcard",
+    "postgiftcard": {
+      "path": "/_v/postgiftcard",
       "public": true
     }
   },

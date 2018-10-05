@@ -10,7 +10,7 @@
   "settingsSchema": {},
   "dependencies": {
     "vtex.admin": "1.x",
-    "vtex.styleguide": "6.x",
+    "vtex.styleguide": "7.x",
     "vtex.vtex-giftcard-v2": "1.x"
   },
   "credentialType": "relative",
