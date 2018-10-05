@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { intlShape, injectIntl } from 'react-intl'
-import { Link, withRuntimeContext } from 'render'
+import { withRuntimeContext } from 'render'
 
-import { getCards } from './actions/cards'
+import { getCards, createCard } from './actions/cards'
 
+import Card from './card'
 import AdminLoading from './components/AdminLoading'
 
-import { PageHeader, ResourceList, Modal, Button, Input } from 'vtex.styleguide'
+import { PageHeader, Table, Badge } from 'vtex.styleguide'
 
 class Cards extends Component {
   static contextTypes = {
@@ -21,7 +22,7 @@ class Cards extends Component {
     this.state = {
       cards: [],
       searchValue: '',
-      showModal: false,
+      showNewCardForm: false,
     }
   }
 
@@ -41,15 +42,6 @@ class Cards extends Component {
     }
   }
 
-  handleAddGiftCard = () => {
-    console.log('handleAddGiftCard')
-  }
-
-  handleConfirmAdd = e => {
-    e.preventDefault()
-    this.handleCloseModal()
-  }
-
   handleInputSearchChange = e => {
     this.setState({ searchValue: e.target.value })
   }
@@ -63,32 +55,50 @@ class Cards extends Component {
     console.log('handleInputSearchSubmit')
   }
 
-  handleOpenModal = () => {
-    this.setState({ showModal: true })
-  }
-
-  handleCloseModal = () => {
-    this.setState({ showModal: false })
-  }
-
   handleNextClick = () => {}
   handlePrevClick = () => {}
 
+  handleNewCard = () => {
+    this.setState({ showNewCardForm: true })
+  }
+
+  handleCloseAddCard = () => {
+    this.setState({ showNewCardForm: false })
+  }
+
+  handleRowClick = () => {
+    console.log('handleRowClick')
+  }
+
+  handleCardCreation = data => {
+    const d = {
+      account: this.props.runtime.account,
+      workspace: this.props.runtime.workspace,
+    }
+    this.props.createCard(d, data)
+    this.handleCloseAddCard()
+  }
+
   render() {
     const { intl, isLoading } = this.props
-    const { culture } = this.context
+    const { showNewCardForm } = this.state
+    // const { culture } = this.context
 
     const schema = {
       properties: {
         id: {
           type: 'string',
           title: 'Id',
+          width: 60,
           cellRenderer: ({ cellData }) => (
-            <div className="ph4 pre truncate hidden">
-              <Link params={{ id: cellData }} page="admin/giftcard/card">
-                {cellData}
-              </Link>
-            </div>
+            <div className="ph4 pre truncate hidden">{cellData}</div>
+          ),
+        },
+        balance: {
+          type: 'string',
+          headerRenderer: () => <div className="ph4 tr">Balance</div>,
+          cellRenderer: ({ cellData }) => (
+            <div className="ph4 tr">{cellData}</div>
           ),
         },
         emissionDate: {
@@ -96,7 +106,7 @@ class Cards extends Component {
           title: 'Emission date',
           cellRenderer: ({ cellData }) => (
             <div className="ph4">
-              {this.props.intl.formatDate(cellData, {
+              {intl.formatDate(cellData, {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric',
@@ -109,7 +119,7 @@ class Cards extends Component {
           title: 'Expiring date',
           cellRenderer: ({ cellData }) => (
             <div className="ph4">
-              {this.props.intl.formatDate(cellData, {
+              {intl.formatDate(cellData, {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric',
@@ -117,53 +127,29 @@ class Cards extends Component {
             </div>
           ),
         },
-        balance: {
+        active: {
           type: 'string',
-          title: 'Balance',
+          title: 'Status',
           cellRenderer: ({ cellData }) => (
             <div className="ph4">
-              {this.props.intl.formatNumber(cellData, {
-                style: 'currency',
-                currency: culture.currency,
-              })}
+              {cellData === 'true' ? (
+                <Badge type="success">Active</Badge>
+              ) : (
+                <Badge>Inactive</Badge>
+              )}
             </div>
           ),
-        },
-        provider: {
-          type: 'string',
-          title: 'Provider',
         },
       },
     }
 
     return (
-      <div className="bg-muted-5">
+      <div
+        className={`bg-muted-5 h-100 relative ${
+          showNewCardForm ? 'overflow-hidden' : ''
+        }`}
+      >
         {isLoading && <AdminLoading />}
-
-        <Modal
-          centered
-          isOpen={this.state.showModal}
-          onClose={this.handleCloseModal}
-        >
-          <div style={{ minWidth: '500px' }}>
-            <h2 className="mb8">Add gift card</h2>
-
-            <form onSubmit={this.handleConfirmAdd}>
-              <Input label="Default" />
-
-              <div className="flex justify-end">
-                <span className="mr4">
-                  <Button variation="secondary" onClick={this.handleCloseModal}>
-                    cancel
-                  </Button>
-                </span>
-                <Button variation="primary" type="submit">
-                  Confirm
-                </Button>
-              </div>
-            </form>
-          </div>
-        </Modal>
 
         <PageHeader
           title={intl.formatMessage({ id: 'page.cards.title' })}
@@ -173,17 +159,22 @@ class Cards extends Component {
 
         <div className="pa7">
           <div className="bg-base pa7 br3">
-            <ResourceList
-              table={{
-                schema: schema,
-                items: this.state.cards,
-              }}
-              inputSearch={{
-                value: this.state.searchValue,
-                placeholder: 'Search by card id',
-                onChange: this.handleInputSearchChange,
-                onClear: this.handleInputSearchClear,
-                onSubmit: this.handleInputSearchSubmit,
+            <Table
+              schema={schema}
+              items={this.state.cards}
+              onRowClick={this.handleRowClick}
+              toolbar={{
+                inputSearch: {
+                  value: this.state.searchValue,
+                  placeholder: 'Search by card id',
+                  onChange: this.handleInputSearchChange,
+                  onClear: this.handleInputSearchClear,
+                  onSubmit: this.handleInputSearchSubmit,
+                },
+                newLine: {
+                  label: 'New',
+                  handleCallback: this.handleNewCard,
+                },
               }}
               pagination={{
                 onNextClick: this.handleNextClick,
@@ -198,6 +189,13 @@ class Cards extends Component {
             />
           </div>
         </div>
+
+        {showNewCardForm && (
+          <Card
+            onOverlayClick={this.handleCloseAddCard}
+            onCreateCardClick={this.handleCardCreation}
+          />
+        )}
       </div>
     )
   }
@@ -211,6 +209,7 @@ Cards.defaultProps = {
 Cards.propTypes = {
   intl: intlShape.isRequired,
   getCards: PropTypes.func.isRequired,
+  createCard: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   cards: PropTypes.array,
   runtime: PropTypes.any,
@@ -224,6 +223,6 @@ const mapStateToProps = state => ({
 export default injectIntl(
   connect(
     mapStateToProps,
-    { getCards },
+    { getCards, createCard },
   )(withRuntimeContext(Cards)),
 )
