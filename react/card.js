@@ -18,10 +18,6 @@ const fields = [
 ]
 
 class Card extends Component {
-  // static contextTypes = {
-  //   navigate: PropTypes.func,
-  // }
-
   constructor() {
     super()
 
@@ -38,10 +34,6 @@ class Card extends Component {
       active: 'true',
     }
   }
-
-  // componentDidMount() {
-  // fields.forEach(field => this.setState({ [`${field}Value`]: ' ' }))
-  // }
 
   handleInputChange = e => {
     const name = `${e.target.name}`
@@ -102,10 +94,5 @@ Card.propTypes = {
   onOverlayClick: PropTypes.func.isRequired,
   onCreateCardClick: PropTypes.func.isRequired,
 }
-
-// const mapStateToProps = state => ({
-//   isLoading: state.cardsReducer.isLoading,
-//   card: state.cardsReducer.card,
-// })
 
 export default injectIntl(Card)

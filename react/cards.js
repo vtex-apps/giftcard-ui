@@ -82,7 +82,6 @@ class Cards extends Component {
   render() {
     const { intl, isLoading } = this.props
     const { showNewCardForm } = this.state
-    // const { culture } = this.context
 
     const schema = {
       properties: {
