@@ -2,20 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { intlShape, injectIntl } from 'react-intl'
 
+import { fields } from './constants'
 import { Input, Button } from 'vtex.styleguide'
-
-const fields = [
-  'relationName',
-  'emissionDate',
-  'expiringDate',
-  'caption',
-  'redemptionCode',
-  'userdocument',
-  'conditions',
-  'balance',
-  'group',
-  'active',
-]
 
 class Card extends Component {
   constructor(props) {
