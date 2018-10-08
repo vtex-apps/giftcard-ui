@@ -9,17 +9,19 @@ class Card extends Component {
   constructor(props) {
     super(props)
 
+    const cardData = props.cardData
+
     this.state = {
-      relationName: props.cardData.relationName || '',
-      emissionDate: props.cardData.emissionDate || '',
-      expiringDate: props.cardData.expiringDate || '',
-      caption: props.cardData.caption || '',
-      redemptionCode: props.cardData.redemptionCode || '',
-      userdocument: props.cardData.userdocument || '',
-      conditions: props.cardData.conditions || '',
-      balance: props.cardData.balance || '',
-      group: props.cardData.group || '',
-      active: props.cardData.active || '',
+      relationName: cardData.relationName || '',
+      emissionDate: cardData.emissionDate || '',
+      expiringDate: cardData.expiringDate || '',
+      caption: cardData.caption || '',
+      redemptionCode: cardData.redemptionCode || '',
+      userdocument: cardData.userdocument || '',
+      conditions: cardData.conditions || '',
+      balance: cardData.balance || '',
+      group: cardData.group || '',
+      active: cardData.active || '',
     }
   }
 
