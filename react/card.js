@@ -36,7 +36,7 @@ class Card extends Component {
   }
 
   render() {
-    const { onOverlayClick, isCardCreation } = this.props
+    const { intl, onOverlayClick, isCardCreation } = this.props
 
     return (
       <div className="absolute bottom-0 right-0 left-0 top-0 w-100 h-100 z-999">
@@ -52,7 +52,11 @@ class Card extends Component {
           }}
           className="absolute w-50 pa6 bottom-0 right-0 top-0 overflow-x-auto bg-white"
         >
-          <h1>{isCardCreation ? 'New Card' : 'Card details'}</h1>
+          <h1>
+            {intl.formatMessage({
+              id: isCardCreation ? 'newCard.title' : 'cardDetails.title',
+            })}
+          </h1>
 
           {fields.map(field => (
             <div key={field} className="mb5">
@@ -61,11 +65,13 @@ class Card extends Component {
                   onChange={this.handleInputChange}
                   value={this.state[field].toString()}
                   name={field}
-                  label={field}
+                  label={intl.formatMessage({ id: `newCard.label.${field}` })}
                 />
               ) : (
                 <div>
-                  <label>{field}</label>
+                  <label>
+                    {intl.formatMessage({ id: `newCard.label.${field}` })}
+                  </label>
                   <div>{this.state[field]}</div>
                 </div>
               )}
@@ -76,10 +82,12 @@ class Card extends Component {
             <div className="flex flex-row justify-end">
               <div className="mr4">
                 <Button onClick={onOverlayClick} variation="tertiary">
-                  cancel
+                  {intl.formatMessage({ id: 'cancel' })}
                 </Button>
               </div>
-              <Button onClick={this.handleCardCreation}>Create</Button>
+              <Button onClick={this.handleCardCreation}>
+                {intl.formatMessage({ id: 'create' })}
+              </Button>
             </div>
           )}
         </div>

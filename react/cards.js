@@ -28,6 +28,10 @@ class Cards extends Component {
     }
   }
 
+  static contextTypes = {
+    culture: PropTypes.object,
+  }
+
   componentDidMount() {
     window.postMessage({ action: { type: 'STOP_LOADING' } }, '*')
 
@@ -86,6 +90,7 @@ class Cards extends Component {
   }
 
   render() {
+    const { culture } = this.context
     const { intl, isLoading } = this.props
     const { showCardForm } = this.state
 
@@ -101,14 +106,23 @@ class Cards extends Component {
         },
         balance: {
           type: 'string',
-          headerRenderer: () => <div className="ph4 tr">Balance</div>,
+          headerRenderer: () => (
+            <div className="ph4 tr">
+              {intl.formatMessage({ id: 'cards.table.header.balance' })}
+            </div>
+          ),
           cellRenderer: ({ cellData }) => (
-            <div className="ph4 tr">{cellData}</div>
+            <div className="ph4 tr">
+              {intl.formatNumber(cellData, {
+                style: 'currency',
+                currency: culture.currency,
+              })}
+            </div>
           ),
         },
         emissionDate: {
           type: 'date-time',
-          title: 'Emission date',
+          title: intl.formatMessage({ id: 'cards.table.header.emissionDate' }),
           cellRenderer: ({ cellData }) => (
             <div className="ph4">
               {intl.formatDate(cellData, {
@@ -121,7 +135,7 @@ class Cards extends Component {
         },
         expiringDate: {
           type: 'date-time',
-          title: 'Expiring date',
+          title: intl.formatMessage({ id: 'cards.table.header.expiringDate' }),
           cellRenderer: ({ cellData }) => (
             <div className="ph4">
               {intl.formatDate(cellData, {
@@ -134,13 +148,15 @@ class Cards extends Component {
         },
         active: {
           type: 'string',
-          title: 'Status',
+          title: intl.formatMessage({ id: 'cards.table.header.status' }),
           cellRenderer: ({ cellData }) => (
             <div className="ph4">
               {cellData === 'true' ? (
-                <Badge type="success">Active</Badge>
+                <Badge type="success">
+                  {intl.formatMessage({ id: 'active' })}
+                </Badge>
               ) : (
-                <Badge>Inactive</Badge>
+                <Badge>{intl.formatMessage({ id: 'inactive' })}</Badge>
               )}
             </div>
           ),
@@ -156,11 +172,7 @@ class Cards extends Component {
       >
         {isLoading && <AdminLoading />}
 
-        <PageHeader
-          title={intl.formatMessage({ id: 'page.cards.title' })}
-          buttonLabel="+ New"
-          onButtonClick={this.handleOpenModal}
-        />
+        <PageHeader title={intl.formatMessage({ id: 'cards.title' })} />
 
         <div className="pa7">
           <div className="bg-base pa7 br3">
@@ -171,13 +183,13 @@ class Cards extends Component {
               toolbar={{
                 inputSearch: {
                   value: this.state.searchValue,
-                  placeholder: 'Search by card id',
+                  placeholder: intl.formatMessage({ id: 'search.by.id' }),
                   onChange: this.handleInputSearchChange,
                   onClear: this.handleInputSearchClear,
                   onSubmit: this.handleInputSearchSubmit,
                 },
                 newLine: {
-                  label: 'New',
+                  label: intl.formatMessage({ id: 'new' }),
                   handleCallback: this.handleNewCard,
                 },
               }}
@@ -186,8 +198,8 @@ class Cards extends Component {
                 onPrevClick: this.handlePrevClick,
                 currentItemFrom: 1,
                 currentItemTo: 10,
-                textOf: 'de',
-                textShowRows: 'show rows',
+                textOf: intl.formatMessage({ id: 'textOf' }),
+                textShowRows: intl.formatMessage({ id: 'textShowRows' }),
                 totalItems: this.state.cards.length,
                 rowsOptions: [5, 10, 15, 20],
               }}
