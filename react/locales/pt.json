@@ -1,5 +1,31 @@
 {
-  "page.cards.title": "Gift Cards",
-  "page.card.title": "Detalhes do Gift Card",
-  "card.pageHeader.backBtnLabel": "Voltar"
+  "cancel": "cancelar",
+  "create": "gerar",
+  "new": "novo",
+  "active": "Ativo",
+  "inactive": "Inativo",
+
+  "search.by.id": "Pesquisa por ID de cartão",
+  "textOf": "de",
+  "textShowRows": "mostrar linhas",
+
+  "cards.title": "Gift Cards",
+  "cards.table.header.balance": "Saldo",
+  "cards.table.header.emissionDate": "Data de emissão",
+  "cards.table.header.expiringDate": "Data de vencimento",
+  "cards.table.header.status": "Estado",
+
+  "newCard.title": "Novo Gift Card",
+  "newCard.label.relationName": "Nome da relação",
+  "newCard.label.emissionDate": "Data de emissão",
+  "newCard.label.expiringDate": "Data de vencimento",
+  "newCard.label.caption": "Caption",
+  "newCard.label.redemptionCode": "Código de redenção",
+  "newCard.label.userdocument": "Documento do usuário",
+  "newCard.label.conditions": "Condições",
+  "newCard.label.balance": "Saldo",
+  "newCard.label.group": "Groupo",
+  "newCard.label.active": "Ativo",
+
+  "cardDetails.title": "Detalhes do Gift Card"
 }

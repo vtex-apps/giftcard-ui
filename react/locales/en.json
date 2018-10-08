@@ -1,5 +1,31 @@
 {
-  "page.cards.title": "Gift Cards",
-  "page.card.title": "Gift Card Details",
-  "card.pageHeader.backBtnLabel": "Back"
+  "cancel": "cancel",
+  "create": "create",
+  "new": "new",
+  "active": "Active",
+  "inactive": "Inactive",
+
+  "search.by.id": "Search by card id",
+  "textOf": "de",
+  "textShowRows": "show rows",
+
+  "cards.title": "Gift Cards",
+  "cards.table.header.balance": "Balance",
+  "cards.table.header.emissionDate": "Emission date",
+  "cards.table.header.expiringDate": "Expiring date",
+  "cards.table.header.status": "Status",
+
+  "newCard.title": "New Card",
+  "newCard.label.relationName": "Relation name",
+  "newCard.label.emissionDate": "Emission date",
+  "newCard.label.expiringDate": "Expiring date",
+  "newCard.label.caption": "Caption",
+  "newCard.label.redemptionCode": "Redemption code",
+  "newCard.label.userdocument": "User document",
+  "newCard.label.conditions": "Conditions",
+  "newCard.label.balance": "Balance",
+  "newCard.label.group": "Group",
+  "newCard.label.active": "Active",
+
+  "cardDetails.title": "Gift Card Details"
 }
