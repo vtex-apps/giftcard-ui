@@ -22,7 +22,9 @@ class Cards extends Component {
     this.state = {
       cards: [],
       searchValue: '',
-      showNewCardForm: false,
+      showCardForm: false,
+      isCardCreation: false,
+      cardData: {},
     }
   }
 
@@ -59,15 +61,19 @@ class Cards extends Component {
   handlePrevClick = () => {}
 
   handleNewCard = () => {
-    this.setState({ showNewCardForm: true })
+    this.setState({ showCardForm: true, isCardCreation: true, cardData: {} })
   }
 
   handleCloseAddCard = () => {
-    this.setState({ showNewCardForm: false })
+    this.setState({ showCardForm: false })
   }
 
-  handleRowClick = () => {
-    console.log('handleRowClick')
+  handleRowClick = data => {
+    this.setState({
+      cardData: data.rowData,
+      showCardForm: true,
+      isCardCreation: false,
+    })
   }
 
   handleCardCreation = data => {
@@ -81,7 +87,7 @@ class Cards extends Component {
 
   render() {
     const { intl, isLoading } = this.props
-    const { showNewCardForm } = this.state
+    const { showCardForm } = this.state
 
     const schema = {
       properties: {
@@ -145,7 +151,7 @@ class Cards extends Component {
     return (
       <div
         className={`bg-muted-5 h-100 relative ${
-          showNewCardForm ? 'overflow-hidden' : ''
+          showCardForm ? 'overflow-hidden' : ''
         }`}
       >
         {isLoading && <AdminLoading />}
@@ -189,10 +195,12 @@ class Cards extends Component {
           </div>
         </div>
 
-        {showNewCardForm && (
+        {showCardForm && (
           <Card
             onOverlayClick={this.handleCloseAddCard}
             onCreateCardClick={this.handleCardCreation}
+            cardData={this.state.cardData}
+            isCardCreation={this.state.isCardCreation}
           />
         )}
       </div>

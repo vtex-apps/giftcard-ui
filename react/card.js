@@ -18,20 +18,20 @@ const fields = [
 ]
 
 class Card extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
 
     this.state = {
-      relationName: 'relation Diego17',
-      emissionDate: '2018-10-04T17:57:50.743Z',
-      expiringDate: '2019-10-04T17:57:50.743Z',
-      caption: 'GiftCardTestKevin2',
-      redemptionCode: 'redemptioncodetest',
-      userdocument: '80344263428',
-      conditions: '{"Document":"80344263428"}',
-      balance: 171,
-      group: 'group1',
-      active: 'true',
+      relationName: props.cardData.relationName || '',
+      emissionDate: props.cardData.emissionDate || '',
+      expiringDate: props.cardData.expiringDate || '',
+      caption: props.cardData.caption || '',
+      redemptionCode: props.cardData.redemptionCode || '',
+      userdocument: props.cardData.userdocument || '',
+      conditions: props.cardData.conditions || '',
+      balance: props.cardData.balance || '',
+      group: props.cardData.group || '',
+      active: props.cardData.active || '',
     }
   }
 
@@ -46,7 +46,7 @@ class Card extends Component {
   }
 
   render() {
-    const { onOverlayClick } = this.props
+    const { onOverlayClick, isCardCreation } = this.props
 
     return (
       <div className="absolute bottom-0 right-0 left-0 top-0 w-100 h-100 z-999">
@@ -62,35 +62,50 @@ class Card extends Component {
           }}
           className="absolute w-50 pa6 bottom-0 right-0 top-0 overflow-x-auto bg-white"
         >
-          <h1>New Card</h1>
+          <h1>{isCardCreation ? 'New Card' : 'Card details'}</h1>
 
           {fields.map(field => (
             <div key={field} className="mb5">
-              <Input
-                onChange={this.handleInputChange}
-                value={this.state[field]}
-                name={field}
-                label={field}
-              />
+              {isCardCreation ? (
+                <Input
+                  onChange={this.handleInputChange}
+                  value={this.state[field].toString()}
+                  name={field}
+                  label={field}
+                />
+              ) : (
+                <div>
+                  <label>{field}</label>
+                  <div>{this.state[field]}</div>
+                </div>
+              )}
             </div>
           ))}
 
-          <div className="flex flex-row justify-end">
-            <div className="mr4">
-              <Button onClick={onOverlayClick} variation="tertiary">
-                cancel
-              </Button>
+          {isCardCreation && (
+            <div className="flex flex-row justify-end">
+              <div className="mr4">
+                <Button onClick={onOverlayClick} variation="tertiary">
+                  cancel
+                </Button>
+              </div>
+              <Button onClick={this.handleCardCreation}>Create</Button>
             </div>
-            <Button onClick={this.handleCardCreation}>Create</Button>
-          </div>
+          )}
         </div>
       </div>
     )
   }
 }
 
+Card.defaultProps = {
+  cardData: {},
+}
+
 Card.propTypes = {
   intl: intlShape,
+  cardData: PropTypes.object,
+  isCardCreation: PropTypes.bool,
   onOverlayClick: PropTypes.func.isRequired,
   onCreateCardClick: PropTypes.func.isRequired,
 }
