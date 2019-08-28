@@ -6,7 +6,9 @@
   "description": "",
   "mustUpdateAt": "2019-08-16",
   "categories": [],
-  "registries": ["smartcheckout"],
+  "registries": [
+    "smartcheckout"
+  ],
   "settingsSchema": {},
   "dependencies": {
     "vtex.admin": "1.x",
@@ -17,7 +19,8 @@
   "builders": {
     "pages": "0.x",
     "react": "2.x",
-    "node": "3.x"
+    "node": "3.x",
+    "docs": "0.x"
   },
   "scripts": {
     "postreleasy": "vtex publish --public"
